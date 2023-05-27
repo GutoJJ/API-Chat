@@ -38,5 +38,17 @@ app.use("/sala/entrar", router.post("/sala/entrar", async (req, res)=>{
     res.status(200).send(resp);
 }))
   
+app.use("/sala/mensagem/", router.post("/sala/mensagem", async (req, res) => {
+    if(!token.checkToken(req.headers.token,req.headers.iduser,req.headers.nick)) return false;
+    let resp= await salaController.enviarMensagem(req.headers.nick, req.body.msg,req.body.idSala);
+    res.status(200).send(resp);
+}))
+
+app.use("/sala/mensagens/", router.get("/sala/mensagens", async (req, res) => {
+    if(!token.checkToken(req.headers.token,req.headers.iduser,req.headers.nick)) return false;
+    let resp= await salaController.buscarMensagens(req.query.idSala, req.query.timestamp);
+    res.status(200).send(resp);
+}))  
+  
 
 module.exports = app;

@@ -14,3 +14,21 @@ exports.entrar= async (iduser,idsala)=>{
   }
   return false;
 }
+
+exports.enviarMensagem= async (nick, msg, idsala)=>{
+    const sala = await salaModel.buscarSala(idsala);
+      if(!sala.msgs){
+      sala.msgs=[];
+    }
+    timestamp=Date.now()
+    sala.msgs.push(
+      {
+        timestamp:timestamp,
+        msg:msg,
+        nick:nick
+      }
+    )
+    let resp = await salaModel.atualizarMensagens(sala);
+    return {"msg":"OK", "timestamp":timestamp};
+}
+  
